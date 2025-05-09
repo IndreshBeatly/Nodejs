@@ -20,7 +20,7 @@ let key = "price";
 console.log(product[0][key]);
 
 
-//ITERATING OVER THE ARRAY 
+//ITERATING OVER THE ARRAY OF OBJECTS 
 
 //1. using for loop 
 for(let i=0;i<product.length;i++){
