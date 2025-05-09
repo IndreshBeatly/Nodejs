@@ -34,6 +34,7 @@ constructor method - new Object() is used to create an object.
 
 
 
+
 //ACCESSING AND UPDATING OBJECT PROPERTIES
 
 //dot notation
