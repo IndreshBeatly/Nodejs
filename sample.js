@@ -1,109 +1,122 @@
-let arrofObj = [
-    {name:"Book1",author:"author1",price:10},
-    {name:"Book2",author:"author2",price:20}
-]
-const a = arrofObj[0]["author"];
-const b = arrofObj[1]["price"];
-const c = arrofObj[0].author;
-const d = arrofObj[1].price;
-
-console.log(a,b,c,d);
-
-const [x,y] = arrofObj;
-console.log(x,"\n",y)
-
-
-let arr = [1,2,3,4,5];
-const [q,w] = arr;
-console.log(q,w);
-
-
-//SPREAD WITH ARRAYS 
-
-//cloning an array
-const newarr = [...arr,6,7,8,9,10,11,12,13,14,15];
-console.log(newarr);
-
-//function arguments using spread operator
-function sum(a,b,c){
-    return a+b+c;
+//reverse a string
+function rstring(str){
+    let reversed = '';
+    for(let i=str.length-1;i>=0;i--){
+        reversed += str[i];
+    }
+    return reversed;
 }
-const values = [10,20,30];
-const result = sum(...values);
-console.log(result);
+console.log(rstring("hello"));
 
-//merging 2 arrays using spread operator
-const arr1 = [1,2,3];
-const arr2 = [4,5,6];
-const merged = [...arr1,...arr2];
-console.log(merged);
-
-//SPREAD WITH OBJECTS
-
-//cloning an object
-const user = {name:"indresh",age:10,role:"billionaire"};
-const company = {...user}
-console.log(user);
-console.log(company);
-
-//updating an object
-const updated = {...company,role:"ceo",employee:1000000};
-console.log(updated);
-
-//merging 2 objects
-const location = {city:"Amsterdam",country:"netherlands"};
-const final = {...updated,...location};
-console.log(final);
-
-//if keys overlap the last one will be taken 
-const user1 = {name:"indresh",age:10,role:"billionire"};
-const updated2 = {...user1,role:"ceo"};
-console.log(updated2);
-
-
-
-
-
-//REST OPERATOR 
-//collects multiple elements and condenses them into a single element
-//it is used in function arguments
-
-//rest in fucntion parameters
-function multiply(multiplier,...numbers){
-    return numbers.map(n=>n*multiplier);
+//max number in a array 
+function maxnum(arr){
+    let max = arr[0];
+    for(let i=0;i<arr.length;i++){
+        if(arr[i]>max) max = arr[i];
+    }
+    return max 
 }
-let num = [1,2,3,4,5];
-let xy = multiply(2,...num);
+console.log(maxnum([10,20,32,43,25,90]))
 
-//here 3 is the multipler and 1,2,3,4,5 are the numbers . the ...num gathers the remaining arguments into an array
-let xyz = multiply(3,1,2,3,4,5);
-console.log(xy);
-console.log(xyz);
+//check for palindrome
+function palindrome(str){
+    rev = rstring(str);
+    let result = str==rev?true:false;
+    return result;
+}
+console.log(palindrome("str"))
 
-//array destrcturing using rest operator
-const value = [10,20,30,40];
-const [first,...rest] = value;
-console.log(first); //10
-console.log(rest);  //[20,30,40]
+//fizzbuzz(n) - print num from 1 to n , multiple of 3 "Fizz", multiple of 5 "Buzz", multiple of 3 and 5 "FizzBuzz"
+function FizzBuzz(n){
+    for(let i=1;i<=n;i++){
+        if(i%3==0&&i%5==0){
+            console.log("FizzBuzz");
+        }
+        else if(i%3==0){
+            console.log("Fizz");
+        }
+        else if(i%5==0){
+            console.log("Buzz");
+        }
+        else{
+            console.log(i)
+        }
+    }
+}
+FizzBuzz(15)
 
-//object destructuring using rest operator
-const user3 = {
-    namee: "Bob",
-    age:20,
-    email:"bob@email.com"
-};
-const {namee,...contactInfo} = user3;
-console.log(namee);
-console.log(contactInfo);
+// capitalise the first leeter of each word in the sentence 
+function capitalise(str){
+    let arr = [];
+    arr = str.split(" ");
+    for(let i=0;i<arr.length;i++){
+        let word = arr[i];
+        let cap = word[0].toUpperCase();
+        arr[i] = cap+word.slice(1);
+    }
+    return arr.join(" ");
+}
+let a = capitalise("i am indresh")
+console.log(a)
 
+//count vowels
+function countVowel(str){
+    let x = str.split("");
+    let count = 0;
+    let vowels = ['a','e','i','o','u','A','E','I','O','U']
+    for(let i=0;i<x.length;i++){
+        for(let j=0;j<vowels.length;j++){
+            if (x[i]==vowels[j]) count++
+        }
+    }
+    return count;
+}
+console.log(countVowel("Indresh"));
 
-//spread operator : expands an iterable (like an array) into more elements
-//rest operator : condenses multiple elements into a single element
+//count vowels refined approach
+function countVowel2(str){
+    let count = 0;
+    const vowels = new Set(['a','e','i','o','u']);
+    for(let ch of str.toLowerCase()){
+        if(vowels.has(ch)) count++;
+    }
+    return count;
+}
+console.log(countVowel2("Indresh"));
 
-//spread operator is used in array,objects and fucntions
-//rest operator is used in function parameters and destructuring
+//flatten a nested array 
+function nested(arr){
+    let result = []
+    for(let i=0;i<arr.length;i++){
+        Array.isArray(arr[i]) ?  result = result.concat(nested(arr[i])) : result.push(arr[i]); 
+    }
 
-//spread operator is used to copy or merge
-//rest operator is used to collect remaining elements in an array or object
+    return result;
+}
+console.log(nested([1,2,[3,4,[5]]]));
 
+//debunce 
 
+//USING ES6 FEATURES
+
+//reverse a string
+const rstring2 = str => str.split("").reverse().join("");
+console.log(rstring2("hello"))
+
+//palindrome
+const palindrome2 = str => str===rstring2(str);
+console.log(palindrome2("hello"))
+
+// capitalise the 1st letter
+const capitalise2 = str => str
+                          .split(" ")
+                          .map(w=> w.charAt(0).toUpperCase() + w.slice(1))
+                          .join(" ")
+console.log(capitalise2("i am indresh"))
+
+//count vowels es6
+const countVowel3 = str => [...str.toLowerCase()].filter(c=>'aeiou'.includes(c)).length;
+console.log(countVowel3("panama island"));
+
+//flatten a nested array 
+const nested = arr => arr.reduce((flat,item)=> flat.concat(Array.isArray(item) ? nested(item): item),[]);

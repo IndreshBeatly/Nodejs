@@ -1,5 +1,5 @@
 //SPREAD WITH ARRAYS 
-
+let arr = [1,2,3,4,5]
 //cloning an array
 const newarr = [...arr,6,7,8,9,10,11,12,13,14,15];
 console.log(newarr);
@@ -8,8 +8,8 @@ console.log(newarr);
 function sum(a,b,c){
     return a+b+c;
 }
-const values = [10,20,30];
-const result = sum(...values);
+const values = [10,20];
+const result = sum(100,...values);
 console.log(result);
 
 //merging 2 arrays using spread operator
@@ -24,7 +24,7 @@ console.log(merged);
 
 //cloning an object
 const user = {name:"indresh",age:10,role:"billionaire"};
-const company = {...user}
+const company = {from:"company",...user}
 console.log(user);
 console.log(company);
 

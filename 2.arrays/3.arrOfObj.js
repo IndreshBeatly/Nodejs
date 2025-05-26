@@ -151,26 +151,3 @@ const listAffordableProducts = (productList,budget)=>{
 const affordableProducts = listAffordableProducts(items,20000);
 console.log(affordableProducts);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
