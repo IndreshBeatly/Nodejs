@@ -119,4 +119,15 @@ const countVowel3 = str => [...str.toLowerCase()].filter(c=>'aeiou'.includes(c))
 console.log(countVowel3("panama island"));
 
 //flatten a nested array 
-const nested = arr => arr.reduce((flat,item)=> flat.concat(Array.isArray(item) ? nested(item): item),[]);
+const nested2 = arr => arr.reduce((flat,item)=> flat.concat(Array.isArray(item) ? nested(item): item),[]);
+console.log(nested2([1,2,[3,4],[10,43]]))
+
+
+//------------------------------------------------------------------------------------------------
+//reverse a string 
+const reve = str => str.split("").reverse().join("");
+console.log(reve("hello"))
+//palindrome 
+const pali = str => reve(str)===str ? console.log(true) : console.log(false);
+pali("tttt")
+//capitalise first letter 

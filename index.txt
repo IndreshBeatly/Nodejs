@@ -1,0 +1,472 @@
+Hoisting in js 
+
+Lets consider the following program 
+
+Var x = 10;
+Function getName(){
+   console.log(“name here:)
+}
+
+//invoke the function 
+getName();
+console.log(x);
+
+
+Now when we run this code we expect to see the output of getName and x in the console 
+>> name here
+>> 10
+
+So this is pretty standard and as expected , but lets take a scenario like below where the invocations are before declarations 
+
+getName();
+console.log(x);
+
+Var x = 10;
+Function getName(){
+  console.log(“name here”)
+}
+
+In this case what may be the exected output ? we may think that since we are calling before declaring and js is single threaded sync programming language , it shd throw an error but the output is like : 
+>> name here 
+>> undefined 
+
+We see this kind of output which is very exceptional and not common in other programming language but this is what happens with  javascript ….
+
+Now lets take a scenario where the variable/fucntion we are trying to call is not at all a part of the program like the below code 
+
+console.log(name);
+getName();
+Var x = 10;
+Function getName(){
+ console.log(“name here”)
+}
+
+
+In this case the output of the undeclared variable turns out to be a Reference error : name not defined 
+
+This shows that if the called variable is not at all present in the code , then there is reference error , but if it is present and called before initialization , it returns the value of the variable as undefined and in case of functions it executes it , if its indepenndedt of other variables . 
+
+This behaviour can clearly be explained by the way the execution context is created and how the values get assigned to it . 
+
+
+“This phenomena in javascript where you can access the variables and functions even before initialising it is called hoisting” . it happens because even before the code execution happens , the memory allocation phase occurs where the variables are given a value of undefined and the functions get their entire code copied in this phase 
+
+When we call a variable or function which is not in the codebase , then in the memory creation phase , there is no memory allocated to that identifier and thus it gives out a reference error as it is not defined
+
+CASES WITH DIFFERNET TYPES OF DECLARING FUCNTION 
+
+As of now lets consider these 3 types of fn declarations 
+Function statement/fucntion declaration : 
+Function expression :
+Arrow functions 
+
+
+Now let us consider a case where the function getName is a arrow function : 
+
+getName();
+console.log(x);
+ Var x = 10;
+Var getName = () => {
+   console.log(“name here”);
+}
+
+When i run thai program keeping the debugger at line 1 (whihc executes the program with the state at which the program execution was paused , based on the position of the debugger) , the output translate out to be 
+>>TypeError : getName is not a function
+>>undefined 
+
+This behaviour happens because when we execute this code , initially the getName is considered as a variable , so in the memory allocation phase just like the variable x gets value as undefined , getName also is undefined 
+
+NOW LEST CONSIDER A CASE WHERE THE FUNCTION IS A FN EXPRESSION
+ 
+getName();
+console.log(x);
+
+Var x = 10;
+Var getName = function() {
+    console.log(“name here “)
+}
+
+The output here is : 
+>>TypeError : getName is not a function
+>>undefined 
+
+This also happens because getName is considered as a variable and given a valeu of undefined , when executed keeping the debugger at line 1 
+
+
+This is all about hoisting 
+
+Note: callstack is the place where all the execution context are maintained 
+
+
+—----------------------------------------------------------------------------------------------------------------------------
+
+HOW FUNCTIONS WORK IN JS 
+
+Function invocation and variable environment in js 
+Fcuntions are the heart of javascript and understanding how functions work and the way variables are scoped is very essential 
+
+Lets consider the following program that has 2 functions a and b , the variable x is repeated 3 times , one in the global scope and 2 inside each function 
+
+
+
+Var x = 1;
+a();
+b();
+console.log(x);
+
+Function a(){
+   Var x = 10;
+   console.log(x);
+}
+
+Function b(){
+    Var x = 100;
+    console.log(x);
+}
+
+
+When we run thai program the output we see is : 
+>>10
+>>100
+>>1
+
+Full inner working of how the code is executed line by line using the execution context gives the clear idea of how each functions have its own mini execution context and takes value from its local scope. This shd be clearly shown by the developer tools using the debugger …
+
+But in the local schope u will notice something called as this:window , about which we will learn soon .
+Consider this situation where the variable called inside the function is not in the local scope but in the global scope , lets see what happens in this case 
+
+let x = 10;
+let y = 20;
+function a(){
+    let x = 11;
+    console.log(x);
+    console.log(y);
+}
+a();
+
+
+
+The output of the code is : 
+>> 11 
+>>20
+So js is able to access the value of its parent too , thai is under the concept of lexical scope chaining and we will learn about it too
+
+------------------------------------------------------------------------------------------------------------------------
+THE SHORTEST JS PROGRAM 
+
+The shortest js proam is th empty file , the empty file is in itself considered as a js progrsam
+Even though the file is empty , js is doing a lot of things behind the scenes 
+
+So when u run thai empty js file , js engine is doing a lot of work in the background , js still creates the global execution context and sets up the memory space , (though there is nothing )
+
+So whenever a js file is run it  creates a gce, something called as a window object and this variable . 
+
+
+Js can be run on different places , like the browser , server etc , but the global object created in the browser is called window ,in sever its called global and so on
+ 
+At the global level , this variable points to the window object , so this === window in global scope gives true 
+Now whenever u create a variable or function in the global scope , it will get attached to the window object . for eg  
+Var x = 10;
+Function b(){
+   Var y = 100;
+}
+
+Here —> x and b() gets attached to the window object as they are in the global scope and y will not get attached to the window object . We can access x and b() from the window object by 
+
+console.log(window.x)    -> 10
+console.log(window.b)    -> Function b(){
+                                                 Var y = 100;
+                                             }
+
+Even if we dont put widow in front of the identifier , it automatically assumes that its in the global space 
+ 
+console.log(x)    -> 10
+console.log(b)    -> Function b(){
+                                                 Var y = 100;
+                                             }
+
+At the global level since this variable points to the window object we can aslo access them as 
+console.log(this.x)    -> 10
+console.log(this.b)    -> Function b(){
+                                                 Var y = 100;
+                                             }
+
+—------------------------------------------------------------------------------------------------------------------------
+UNDEFINED VS NOT DEFINED IN JS 
+
+Undefined is a very special keyword in js that is not present in any other languages 
+It has a lot to do with how javascript code is executed 
+Wkt when the js code is executed , first the execution context is created , and in the memory creation phase , the variables shd be given some placeholder value , this placeholder is the keyword “undeined” and it signifies absence of a value or uninitialized state. 
+
+When the value fo some variable is undefined it simply signifies that that variable is actually present and there is some memory allocated to it , but there is no value initialised in it , so to show that it has some memory allocated , js has given a special keyword called undefined to represent it 
+
+Not defined on the contrary signifies that the variable is itself absent and thus no memory is initailsed , so the identifier is itself missing ..
+
+
+
+Javascript is a loosely typed language or weekly tyed lang cuz variables can have different values and threr is no type restrictions . 
+
+
+—------------------------------------------------------------------------------------------------------------------------
+SCOPE, SCOPE CHAIN AND LEXICAL ENVIRONMENT 
+
+lets look at the following program
+
+function a(){
+    console.log(b);
+}
+var b =10
+a();
+
+when we execute this program , we see that in th ememroy creation phase , function a is copied and b = undefined. then in the code execution phase function a is invoked , in this invok=cation we see that fucntion a tries to log the value of b , so first the value of b is checked in the local memory of the execution context of function a , but there is no variable called b , therefore what will happen now ?
+
+so when we run thsi we see that it prints the alue of b = 10 , so th eprogram was able to access the value of b viz outisde its memory 
+
+lets take another example : 
+fucntion a(){
+    c();
+    fcuntion c(){
+        console.log(b)
+    }
+}
+var b = 10
+a()
+
+
+In this exmaple we see that the fucnion a is invoked which invokes function c and then fucntion c logs the value fo b , but b is neither in the scpe of fucntion c or fucntion a , but it is outside it , and it still is able to access it 
+
+lets take another scenario where we are trying to access a variabe which is inside a fucntion outise of it 
+fcuntion a(){
+    var b = 100;
+}
+consoel.log(b);
+
+in this example we see that b is in the fucnton a's scope but when we try to access it ouside of its scope , it will throw a reference error as not defined 
+
+## Thus this is where the coincept of scope comes into play - scope of some identifier is defined as all the places where we can access its value in our codebase 
+There are  ways to look at the scope : 
+    1. what is the scope of the variable background
+    2. is variable b inside the scope if fucntion a 
+
+Scope is directly related to the lexical environment , so lest understand whats a lexical environmen t 
+
+refer image.png : he below exp uses it 
+whenever a execution context is created , a lexical environment is also create with it 
+A lexical environmen is a ["The local memeory along with the lexical evronment of the parent " ]
+WHat is lexical  ? 
+lexcial means in heirarchy , in this code in the imaeg we can say that fucntion c is lexically inside fucntion a and a is lexically inside the global scope 
+
+so when the executino context is being created , a orange thing aso gets created whcich has access to the  lexcial scope of its parent. so when the fcuntion is executed in the code oin the image , a is called , so in fucntion a b = 10 and c is called , so in c we want to print b , but b is not in the scope if c , so c tries to access its lexical parent's memeory and checks for b , and sicnde b is there in fucntion a its value gets accessed , this proacess where lexical scopes are chained to each other from the child to the parent is called scope chaining , scope chaining is unidirectional and always ahppens from the child to the parent. 
+
+now in the code say we are trying to log x viz not a part of the local scope of fccuntion c , so it goes to its ;exical parent , viz fucntion a's memeory and checks if the value is present , and since x is not here too , it goes to its lexical parents'slocal memeory viz the global scope and it also doesnt have the value of x so it goes to the lexical parent of global scope viz pointed to null , therefore the program terminates with printing x as not defined 
+
+---> now u can check the video from 15 mins tp check the broweser demo and take notes 
+fr fucntion c the scope chain is --- local -> closure(a) ---> global (go theorught he clip once)
+—---------------------------------------------------------------------------------------------------------
+
+LET CONST DECLARATIONS , THEIR HOISTING AND TEMPORAL DEAD ZONE 
+
+Q - Are let and const declarations hoisted ? - yes they are , but their hositing is very different from var declaration 
+
+lets see the following code 
+
+console.log(b);
+console.log(a);
+var b = 10;
+let a = 100;
+
+
+when we run this program we see the following output : 
+>> undefined 
+>> reference error : cannot access a before initialising 
+
+now we will explain how let and const declarations are hoisted differently : 
+- in this program during the memeory creation phase the following happens 
+            --- global 
+                    b : undefined
+            --- scripts
+                    a : undefined 
+- so both let and var declarations are allocated memeory but var gets attached to the global object (window object in browsers) , but let declaatons get hoisted in a seperate place called scripts 
+
+so we can access window.b or this.b , it will give the correct value , but window.a or this.a will give undefined 
+
+From this we can infer that : 
+    - let declarations are first stored in a seperate space called scripts , 
+    - initlaly, similar to var declaratiosn they are als gven the value of undefined , thus memeory is allocated adnd they are actually being hoisted ,
+    - but upon trying to access the let declared variables before initalialising it gives a reference error stating that the variable cant be accessed before initialsiing 
+    - once the value of the let declared variable si initalised , it get updated in the scripts place where it is hoisted and from then on if we access it , we get the correct value 
+    - for variable declared with let - the time from declaring till getting inialised with a value is called Temporal dead zone , because during this time the variable cannot be accessed and attemting to do so gives Reference Error 
+    - let declarations cant be redeclared like var , but let variables can be reassined 
+    - const variables cant be only declared , whenever they are declared , they shd also be initialise dand we cant update the values of const varibale , apart from that in terms of hoisting const is similar to let 
+
+REFERENCE ERROR : the identifier we are trying to access is not available in the scope , so it can either be undeclared or it is out of scope from where it is being accessed . in cases like the let dec;arations , we may get this error if it is in the temporal dead zone (value not yet initalised)
+
+SYNTAX ERROR : Any error that occurs due to mistakes in the language constructs and rules leads to syntax error
+
+TYPEERROR : Type error occur when the value is not of the expected type or an operation is performed on an incompatible type , common causes are 
+1. calling a method on the wrong type , eg using  a string based method on number ..etc 
+    eg : let num=5;
+         num.toUpperCase();
+         >> TypeError: num.toUpperCase is not  a fucntion ( its used for strings )
+2. tryig to assign to read-only properties
+     reassigning value to a const type will give TypeError , 
+3. accessing proeprties of undefined or null 
+
+Now that we have 3 ways to declare a variable , alwasy try ot use const in max case if the value is upfront known and is not going to be changed , else use let , avoid using var 
+HOW to avoid Temporal dead zone : always have the declarations and initialisations in the top of th eprogram before accessing it , having it at the top shrinks the temoral dead zone to 0 as it is decared and initalised asap
+
+
+
+—---------------------------------------------------------------------------------------------------------
+BLOCK , BLOCK SCOPE AND SHADOWING CONCEPT 
+
+ - A block in javascript is a group of statements within a { } brackets 
+ - A block is used to combine multiple javascript statements into one group , thus they are also called compound statements 
+ - We need to write compound statements because in places where javascrip expects only one statement , we give multiple statements within the {} to consider it as a single statement 
+
+For eg : lets take the example of if statement : 
+               if (condition) consequence 
+Here  condition finally turns to a boolean and consequence is a single statement , but in case we have multiple staemnts to be executed as a consequence , we use the compound statement or block 
+
+if(true) console.log(“hi”);
+
+if(true) {
+    Let x = 10;
+    console.log(x);
+}
+
+Now lets come to understand whats BLOCK SCOPE 
+Block scope refers to all the variable and functions that can be accessed within the block 
+
+Lets take the example of the below program : 
+{
+   Var a = 10;
+   Let b = 20;
+   Const c = 30;
+   console.log(a);
+   console.log(b);
+   console.log(c);
+}
+console.log(a);
+console.log(b);
+console.log(c);
+
+Once the program is executed , the memory is allocated as follows : 
+     —-- global scope : 
+             A:10
+     —--- block scope : 
+              B:20;
+              C:30;
+
+So the variable s declared in teh block using let and const cant be accessed outside the block , cuz they are block scoped but var declared variables are globally scoped and can be accessed from anywhere 
+
+The output of the code will be : 
+>> 10
+>> 20 
+>> 30
+>> 10
+>> Uncaught reference error :  b is not defined 
+
+SHADOWING IN JAVASCRIPT 
+
+When variables with same name are declared both within a certain scope (like a function / block) and in the outer scope , then the inner variable shadows or hides the outer variable within its scope (in case of let and const ) and in case of var , the latest declaration at that moment is taken as it is globally scoped and any change will affect the variable globally 
+
+Example : 
+
+"Var redeclarations : "
+
+Var a = 100;
+console.log(a);
+{
+  var a = 10;
+  console.log(a);
+}
+console.log(a);
+
+Scope  —->   global scope 
+                a : 100
+ 		        a : 10
+Output —---> 
+	        >> 100
+	        >> 10
+	        >> 10
+-----------------------------------------------------            
+"Var and let :" 
+
+Var a = 100;
+console.log(a);
+{
+  let a = 10;
+  console.log(a);
+}
+console.log(a);
+
+Scope  —->   global scope 
+                 a : 100
+ 	         Script 
+		         a : 10
+Output —---> 
+	        >> 100
+	        >> 10
+	        >> 100
+
+-----------------------------------------------------    
+"Let and let "
+
+        let a = 100;
+        console.log(a);
+        Function c() {
+            let a = 10;
+            console.log(a);
+        }
+        c();
+        console.log(a);
+
+Scope  —->   global  scope 
+                         
+ 	           Script 
+		        a : 100
+		
+		        Block
+		        a : 10
+Output —---> 
+	>> 100
+	>> 10
+	>> 100
+------------------------------------
+
+IILEGAL SHADOWING TOPIC  
+
+A situaltion in programming where a variable declared in local scope ( inside a fucntion / block) tries to use the same name as the variable in the outer scope but in a way thast not allowed in the language rules , causing an error is called Illegal shadowing 
+
+In javascript , the rule is if a variable is trying to shadow another variable it should not affect the variable outside its block scope , eg : 
+
+let a = 10;
+{
+    var a = 100;
+    console.log(a);
+}
+
+here the var a is not blcok scoped , so it tries to go into the same scope as let a and since a is already declared using let , we get a error that "Cannot redeclare block-scoped variable SyntaxError: Identifier 'a' has already been declared "
+
+Because:
+
+let is block-scoped.
+var is function-scoped.
+A var cannot legally shadow a let declared in an outer scope.
+
+The same thig may work when we declare var in a fucntion , cuz var is fucntion scoped , it will not disturb the declarations in the outer Scope\
+
+let a = 10;
+function x(){
+    var a = 100;
+    console.log(a);
+}
+
+-----------------------------------------------------------------------------------------------------------
+
+CLOSURES 
+
+
+
+
