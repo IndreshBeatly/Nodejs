@@ -1,0 +1,13 @@
+Basics 
+    1.User I/O
+    2. Data types
+    3. If else 
+    4. switch
+    5. what are arrays and strings 
+    6. for loops 
+    7. while loop
+    8. fucntions(pass by value and pass by reference)
+    9. Time and space complexity 
+    10. Pattern practice 
+    11. c++ stl 
+    12. 

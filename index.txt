@@ -467,6 +467,51 @@ function x(){
 
 CLOSURES 
 
+TO understand closure lets first get into the code 
+
+fucntion x(){
+    var a = 7;
+    function y(){
+        console.log(a);
+    }
+    y();
+}
+x();
+
+When we run this program we can understand that frst when fcuntion x is invoked it gies in and a = 7 , then fucntion y is called so it goes to it and see console.log(A) , now the value of a is checked in the local scope of fucntion y and since its absent , it checks th ememeory of its lexical parent and finds the value as 7 and logs it. 
+
+This is Exactly what closure is !!!!
+
+A closue is a fucntion bundled with its lexical scope
+A closure is created when a fcntion is defined inside another function and the inner function uses the variables from the outer one 
+
+Another example of closure : 
+function outer() {
+  let count = 0;
+
+  function inner() {
+    count++;
+    console.log(count);
+  }
+
+  return inner;
+}
+
+const counter = outer(); // outer runs and returns inner
+counter(); // 1
+counter(); // 2
+counter(); // 3
+
+Here’s what’s happening:
+1.outer() returns inner.
+2.inner() uses count, which is declared in outer.
+3.Even though outer() has finished, inner() still has access to count.
+That's a closure.
 
 
-
+N
+ Continuous cuffless blood 
+pressure monitoring using 
+photoplethysmography‑based 
+PPG2BP‑net for high intrasubject 
+blood pressure variations

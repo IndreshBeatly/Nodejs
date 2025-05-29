@@ -48,6 +48,4 @@ console.log(arr5);
 
 /* 
 1. When you pull data from APIs, DOM calls, or third‑party libraries, use Array.isArray to avoid “length is undefined” errors.
-
-
 */
